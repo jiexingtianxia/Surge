@@ -413,14 +413,14 @@ public func % <L: UnsafeMemoryAccessible>(lhs: L, rhs: Double) -> [Double] where
 /// - Warning: does not support memory stride (assumes stride is 1).
 func modInPlace<L: UnsafeMutableMemoryAccessible>(_ lhs: inout L, _ rhs: Float) where L.Element == Float {
     let rhs = Array(repeating: rhs, count: lhs.count)
-    modInPlace(&lhs, rhs)
+    elmodInPlace(&lhs, rhs)
 }
 
 /// - Warning: Allocates a temporary array from `rhs` via `Array(repeating: rhs, count: lhs.count)`.
 /// - Warning: does not support memory stride (assumes stride is 1).
 func modInPlace<L: UnsafeMutableMemoryAccessible>(_ lhs: inout L, _ rhs: Double) where L.Element == Double {
     let rhs = Array(repeating: rhs, count: lhs.count)
-    modInPlace(&lhs, rhs)
+    elmodInPlace(&lhs, rhs)
 }
 
 /// - Warning: Allocates a temporary array from `rhs` via `Array(repeating: rhs, count: lhs.count)`.
@@ -439,12 +439,12 @@ public func .%= <L: UnsafeMutableMemoryAccessible>(lhs: inout L, rhs: Double) wh
 
 /// - Warning: does not support memory stride (assumes stride is 1).
 public func mod<L: UnsafeMemoryAccessible, R: UnsafeMemoryAccessible>(_ lhs: L, _ rhs: R) -> [Float] where L.Element == Float, R.Element == Float {
-    return withArray(from: lhs) { modInPlace(&$0, rhs) }
+    return withArray(from: lhs) { elmodInPlace(&$0, rhs) }
 }
 
 /// - Warning: does not support memory stride (assumes stride is 1).
 public func mod<L: UnsafeMemoryAccessible, R: UnsafeMemoryAccessible>(_ lhs: L, _ rhs: R) -> [Double] where L.Element == Double, R.Element == Double {
-    return withArray(from: lhs) { modInPlace(&$0, rhs) }
+    return withArray(from: lhs) { elmodInPlace(&$0, rhs) }
 }
 
 public func .% <L: UnsafeMemoryAccessible, R: UnsafeMemoryAccessible>(lhs: L, rhs: R) -> [Float] where L.Element == Float, R.Element == Float {
@@ -458,7 +458,7 @@ public func .% <L: UnsafeMemoryAccessible, R: UnsafeMemoryAccessible>(lhs: L, rh
 // MARK: - Element-wise Modulo: In Place
 
 /// - Warning: does not support memory stride (assumes stride is 1).
-func modInPlace<L: UnsafeMutableMemoryAccessible, R: UnsafeMemoryAccessible>(_ lhs: inout L, _ rhs: R) where L.Element == Float, R.Element == Float {
+func elmodInPlace<L: UnsafeMutableMemoryAccessible, R: UnsafeMemoryAccessible>(_ lhs: inout L, _ rhs: R) where L.Element == Float, R.Element == Float {
     precondition(lhs.count == rhs.count, "Collections must have the same size")
     var elementCount: Int32 = numericCast(lhs.count)
     withUnsafeMutableMemory(&lhs) { lm in
@@ -469,7 +469,7 @@ func modInPlace<L: UnsafeMutableMemoryAccessible, R: UnsafeMemoryAccessible>(_ l
 }
 
 /// - Warning: does not support memory stride (assumes stride is 1).
-func modInPlace<L: UnsafeMutableMemoryAccessible, R: UnsafeMemoryAccessible>(_ lhs: inout L, _ rhs: R) where L.Element == Double, R.Element == Double {
+func elmodInPlace<L: UnsafeMutableMemoryAccessible, R: UnsafeMemoryAccessible>(_ lhs: inout L, _ rhs: R) where L.Element == Double, R.Element == Double {
     precondition(lhs.count == rhs.count, "Collections must have the same size")
     var elementCount: Int32 = numericCast(lhs.count)
     withUnsafeMutableMemory(&lhs) { lm in
@@ -480,11 +480,11 @@ func modInPlace<L: UnsafeMutableMemoryAccessible, R: UnsafeMemoryAccessible>(_ l
 }
 
 public func .%= <L: UnsafeMutableMemoryAccessible, R: UnsafeMemoryAccessible>(lhs: inout L, rhs: R) where L.Element == Float, R.Element == Float {
-    return modInPlace(&lhs, rhs)
+    return elmodInPlace(&lhs, rhs)
 }
 
 public func .%= <L: UnsafeMutableMemoryAccessible, R: UnsafeMemoryAccessible>(lhs: inout L, rhs: R) where L.Element == Double, R.Element == Double {
-    return modInPlace(&lhs, rhs)
+    return elmodInPlace(&lhs, rhs)
 }
 
 // MARK: - Remainder
