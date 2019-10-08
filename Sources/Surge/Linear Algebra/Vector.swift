@@ -36,7 +36,7 @@ public struct Vector<Scalar> where Scalar: FloatingPoint, Scalar: ExpressibleByF
         self.init(scalars)
     }
 
-    public init<T: Sequence>(_ contents: T) where T.Element == Scalar {
+    public init<T>(_ contents: T) where T: Sequence, T.Element == Scalar {
         let scalars: [Scalar]
         if let array = contents as? [Scalar] {
             scalars = array
@@ -71,7 +71,7 @@ extension Vector: ExpressibleByArrayLiteral {
 
 extension Vector: CustomStringConvertible {
     public var description: String {
-        return self.scalars.map({ "\($0)" }).joined(separator: "\t")
+        return self.scalars.map { "\($0)" }.joined(separator: "\t")
     }
 }
 
@@ -112,7 +112,7 @@ extension Vector: Collection {
 // MARK: - Equatable
 
 extension Vector: Equatable {}
-public func ==<T> (lhs: Vector<T>, rhs: Vector<T>) -> Bool {
+public func == <T>(lhs: Vector<T>, rhs: Vector<T>) -> Bool {
     return lhs.scalars == rhs.scalars
 }
 
